@@ -1,0 +1,78 @@
+   <form (ngSubmit) = "save()" [formGroup] = "customerForm">
+     
+    <div class = "form-group row mb-2">
+      <div class = "col-md-8">
+       <label class = "form-check"> 
+
+        <input class = "form-check-label" id = "firstName" type = "text"
+         placeholder="First Name (required)" required minlength="3" formControlName = "firstName"/>
+         First Name  
+       </label>
+      </div>
+    </div> 
+
+    <div class = "form-group row mb-2">
+      <div class = "col-md-8">
+        <label class = "form-check"> 
+
+         <input class = "form-check-label" id = "lastName" type = "text"
+         placeholder="Last Name (required)" required minlength="3" formControlName = "lastName"/>
+          Last Name  
+        </label>
+      </div>
+    </div> 
+
+    <div class = "form-group row mb-2">
+      <div class = "col-md-8">
+        <label class = "form-check"> 
+
+         <input class = "form-check-label" id = "email" type = "email"
+          placeholder="Email Address(required)" required  formControlName = "email"/>
+          Email Address 
+        </label>
+       
+        <span class="invalid-feedback">
+              <span *ngIf="customerForm.get('email').errors ?.required">
+                Please enter a  email address
+              </span>
+        </span>
+
+        <span class="invalid-feedback">
+          <span *ngIf="customerForm.get('email').errors ?.email">
+             Please enter a valid email address
+          </span>
+        </span>
+
+      </div>
+    </div> 
+
+
+    <div class = "form-group row mb-2">
+      <div class = "col-md-8">
+        <label class = "form-check"> 
+         <input class = "form-check-label" id = "sendCatalogid" type="checkbox" formControlName = "sendCatalog"/>
+          Send me a catalogue
+        </label>
+      </div>
+    </div> 
+
+    <div class = "form-group row mb-2">
+      <div class = "offset-md-2 col-md-4">
+          <button class="btn btn-primary mr-3" type="submit" style="width:85px" (click)="save()"
+          [title]= "customerForm.valid? 'Save your entered data' : 'Disabled until form data'"
+          [disabled] = "!customerForm.valid">Save</button>
+
+          <button class="btn btn-secondary" type="button" style="width:85px" (click)="populateTestData()"
+          >Test Data</button>
+      </div>
+    </div> 
+
+   </form>
+
+
+<br> Dirty: {{customerForm.dirty}}
+<br> Touched : {{customerForm.touched}}
+<br> Valid : {{customerForm.valid}}
+
+<br>Value : {{customerForm.value | json}}
+
