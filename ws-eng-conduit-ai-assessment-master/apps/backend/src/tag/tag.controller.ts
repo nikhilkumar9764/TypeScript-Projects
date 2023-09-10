@@ -19,6 +19,7 @@ export class TagController {
   @Post()
   async create(@Body() tagDto: CreateTagDto): Promise<Tag> {
     return await this.tagService.create(tagDto);
+    
   }
 
   @Get(':id')
