@@ -3,6 +3,7 @@ import {
   Collection,
   Entity,
   EntityDTO,
+  EntityRepository,
   ManyToOne,
   OneToMany,
   PrimaryKey,
@@ -13,6 +14,7 @@ import slug from 'slug';
 
 import { User } from '../user/user.entity';
 import { Comment } from './comment.entity';
+import { InjectRepository } from '@mikro-orm/nestjs';
 
 @Entity()
 export class Article {
@@ -39,6 +41,9 @@ export class Article {
 
   @Property({ type: ArrayType })
   tagList: string[] = [];
+
+  @Property({ type: ArrayType })
+  coauthors: string[] = [];
 
   @ManyToOne(() => User)
   author: User;

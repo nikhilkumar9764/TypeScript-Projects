@@ -4,12 +4,15 @@ import { FormGroup } from '@angular/forms';
 import { Field } from '../+state/forms.interfaces';
 import { InputComponent } from '../fields/input/input.component';
 import { TextareaComponent } from '../fields/textarea/textarea.component';
+import { MultiListComponent } from '../fields/multilist/multilist.component';
 
-type Components = InputComponent | TextareaComponent;
+
+type Components = InputComponent | TextareaComponent | MultiListComponent;
 
 const componentsMapper: { [key: string]: Type<Components> } = {
   INPUT: InputComponent,
   TEXTAREA: TextareaComponent,
+  MULTILIST : MultiListComponent
 };
 
 @Directive({

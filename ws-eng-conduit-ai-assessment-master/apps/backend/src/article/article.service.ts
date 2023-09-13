@@ -95,7 +95,8 @@ export class ArticleService {
     const user = userId
       ? await this.userRepository.findOneOrFail(userId, { populate: ['followers', 'favorites'] })
       : undefined;
-    const article = await this.articleRepository.findOne(where, { populate: ['author'] });
+    const article = await this.articleRepository.findOneOrFail(where, { populate: ['author'] });
+    article.coauthors = article.coauthors.filter((author) => author!== user?.username);
     return { article: article && article.toJSON(user) } as IArticleRO;
   }
 

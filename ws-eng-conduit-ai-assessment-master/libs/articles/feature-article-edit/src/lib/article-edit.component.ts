@@ -31,6 +31,13 @@ const structure: Field[] = [
     placeholder: 'Enter Tags',
     validator: [],
   },
+
+  {
+    type: 'MULTILIST',
+    name: 'coauthors',
+    placeholder: 'Co-authors',
+    validator: [],
+  },
 ];
 
 @UntilDestroy()
@@ -54,7 +61,8 @@ export class ArticleEditComponent implements OnInit, OnDestroy {
     this.store
       .select(articleQuery.selectData)
       .pipe(untilDestroyed(this))
-      .subscribe((article) => this.store.dispatch(formsActions.setData({ data: article })));
+      .subscribe((article) => 
+      this.store.dispatch(formsActions.setData({ data: article})));
   }
 
   updateForm(changes: any) {

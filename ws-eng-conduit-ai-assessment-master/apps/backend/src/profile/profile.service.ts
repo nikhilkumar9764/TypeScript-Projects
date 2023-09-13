@@ -12,6 +12,12 @@ export class ProfileService {
     return this.userRepository.findAll();
   }
 
+  async get_all_author() {
+      const all_authors = this.userRepository.findAll();
+      console.log(all_authors);
+      return all_authors;
+  }
+
   async findOne(options?: FilterQuery<User>): Promise<IProfileRO> {
     const user = (await this.userRepository.findOne(options ?? {})) as any;
 

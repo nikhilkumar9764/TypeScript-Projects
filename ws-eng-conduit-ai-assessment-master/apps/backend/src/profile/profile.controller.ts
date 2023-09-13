@@ -9,12 +9,18 @@ import { ProfileService } from './profile.service';
 @Controller('profiles')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
-
+  
   @Get(':username')
   async getProfile(@User('id') userId: number, @Param('username') username: string): Promise<IProfileRO> {
     return this.profileService.findProfile(userId, username);
   }
 
+  @Get("/get_all_authors")
+  async getAuthors() {
+    return this.profileService.get_all_author();
+  }
+
+  
   @Post(':username/follow')
   @HttpCode(200)
   async follow(@User('email') email: string, @Param('username') username: string): Promise<IProfileRO> {

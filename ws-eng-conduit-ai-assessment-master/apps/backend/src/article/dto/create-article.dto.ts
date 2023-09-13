@@ -3,4 +3,5 @@ export class CreateArticleDto {
    description: string;
    body: string;
    tagList: string[];
+   coauthors : string[];
 }
