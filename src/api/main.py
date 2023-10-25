@@ -6,21 +6,26 @@ from sqlalchemy.orm import Session, relationship
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from typing import List
+from uvicorn import *
 
 app = FastAPI()
 
 DATABASE_URL = "sqlite:///./test.db"  
 engine = create_engine(DATABASE_URL)
 SessionLocal = Session(engine)
+def get_db():
+    try:
+        yield SessionLocal
+    finally: 
+        SessionLocal.close()
+    
 Base = declarative_base()
-
 
 class Author(Base):
     __tablename__ = "authors"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     books = relationship("Book", back_populates="author")
-
 
 class Book(Base):
     __tablename__ = "books"
@@ -119,19 +124,23 @@ def get_author(db: Session, author_id: int):
     return db.query(Author).filter(Author.id == author_id).first()
 
 
-def get_authors(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(Author).offset(skip).limit(limit).all()
+def get_all_authors(db: Session, skip: int = 0, limit: int = 10):
+    cols = [Author.books]
+    query1 = db.query(*cols)
+    return query1.offset(skip).limit(limit).all()
 
 
-def create_author(db: Session, author: AuthorCreate):
+def create_author1(db: Session, author: AuthorCreate):
+    print(author)
     db_author = Author(**author.dict())
+    print(db_author)
     db.add(db_author)
     db.commit()
     db.refresh(db_author)
     return db_author
 
 # Define a function to update an author by ID
-def update_author(db: Session, author_id: int, updated_author: AuthorCreate):
+def update_author1(db: Session, author_id: int, updated_author: AuthorCreate):
     db_author = db.query(Author).filter(Author.id == author_id).first()
     if db_author:
         for field, value in updated_author.dict().items():
@@ -146,19 +155,20 @@ def get_book(db: Session, book_id: int):
     return db.query(Book).filter(Book.id == book_id).first()
 
 # Define a function to get a list of books with pagination
-def get_books(db: Session, skip: int = 0, limit: int = 10):
+def get_all_books(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Book).offset(skip).limit(limit).all()
 
 # Define a function to create a new book
-def create_book(db: Session, book: BookCreate):
+def create_book1(db: Session, book: BookCreate):
+    print(book)
     db_book = Book(**book.dict())
+    print(db_book)
     db.add(db_book)
     db.commit()
     db.refresh(db_book)
     return db_book
 
-# Define a function to update a book by ID
-def update_book(db: Session, book_id: int, updated_book: BookCreate):
+def update_book1(db: Session, book_id: int, updated_book: BookCreate):
     db_book = db.query(Book).filter(Book.id == book_id).first()
     if db_book:
         for field, value in updated_book.dict().items():
@@ -168,39 +178,40 @@ def update_book(db: Session, book_id: int, updated_book: BookCreate):
         return db_book
     return None
 
-# ...
-
-# Update your /authors and /books routes to use these functions
-@app.get("/authors", response_model=List[Author])
+@app.get("/authors")
 def get_authors(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    authors = get_authors(db, skip, limit)
+    authors = get_all_authors(db, skip, limit)
     return authors
 
-@app.post("/authors", response_model=Author)
+@app.post("/add-author")
 def create_author(author: AuthorCreate, db: Session = Depends(get_db)):
-    new_author = create_author(db, author)
+    new_author = create_author1(db, author)
     return new_author
 
-@app.put("/authors/{author_id}", response_model=Author)
+@app.put("/authors/{author_id}")
 def update_author(author_id: int, updated_author: AuthorCreate, db: Session = Depends(get_db)):
-    author = update_author(db, author_id, updated_author)
+    author = update_author1(db, author_id, updated_author)
     if author:
         return author
     raise HTTPException(status_code=404, detail="Author not found")
 
-@app.get("/books", response_model=List[Book])
-def get_books(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    books = get_books(db, skip, limit)
+
+@app.get("/books")
+def get_books(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)) :
+    books = get_all_books(db, skip, limit)
     return books
 
-@app.post("/books", response_model=Book)
+@app.post("/books")
 def create_book(book: BookCreate, db: Session = Depends(get_db)):
-    new_book = create_book(db, book)
+    new_book = create_book1(db, book)
     return new_book
 
-@app.put("/books/{book_id}", response_model=Book)
+@app.put("/books/{book_id}")
 def update_book(book_id: int, updated_book: BookCreate, db: Session = Depends(get_db)):
-    book = update_book(db, book_id, updated_book)
+    book = update_book1(db, book_id, updated_book)
     if book:
         return book
     raise HTTPException(status_code=404, detail="Book not found")
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
