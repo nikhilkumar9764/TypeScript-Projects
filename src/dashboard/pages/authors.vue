@@ -31,7 +31,7 @@
       await store.dispatch('fetchAuthors');
   
       return {
-        authors: store.state.authors,
+        authors: store.state.authors.authors,
       };
     },
     methods: {

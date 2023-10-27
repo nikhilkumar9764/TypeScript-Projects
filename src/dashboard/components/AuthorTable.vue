@@ -6,9 +6,10 @@
             </template>
         </b-table>
     </div>
-    <AuthorEditModal :showModal="showModal" :editedAuthor="editedAuthor" @author-updated="updateAuthor" />
-           
 </template>
+
+<AuthorEditModal :showModal="showModal" :editedAuthor="editedAuthor" @author-updated="updateAuthor" />
+           
 
 <script>
 export default

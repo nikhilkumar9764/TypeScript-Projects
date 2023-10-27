@@ -33,7 +33,7 @@
       await store.dispatch('fetchBooks');
   
       return {
-        books: store.state.books,
+        books: store.state.books.books,
       };
     },
     methods: {
