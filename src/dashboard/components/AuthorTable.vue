@@ -1,14 +1,20 @@
 <template>
     <div>
-        <b-table :items="authors" :fields="fields">
-            <template slot="actions" slot-scope="data">
-                  <b-button @click="editAuthor(data.item)">Edit</b-button>
-            </template>
-        </b-table>
+        <div>
+            <b-table :items="authors" :fields="fields" >
+                <template v-slot:cell(edit) = "{item}">
+                    <b-button @click="editAuthor(item)">Edit</b-button>
+                </template>
+                <template v-slot:cell(delete) = "{item}"> 
+                    <b-icon icon="exclamation-triangle" @click="deleteAuthor(item)"></b-icon>
+                 </template>
+           </b-table>   
+        </div>
+        <AuthorEditModal v-if="showModal" :showModal="showModal" :editedAuthor="editedAuthor" :o1="editedAuthor" @author-updated="updateAuthor" />
     </div>
 </template>
 
-<AuthorEditModal :showModal="showModal" :editedAuthor="editedAuthor" @author-updated="updateAuthor" />
+
            
 
 <script>
@@ -25,27 +31,35 @@ export default
          authors : [],
           fields : [
               {key : 'name' , label : "Name"} , 
-              { key : "bookCount" , label : "Number of books"} , 
-              { key : "actions" , label : "Actions"}
+              { key : "books" , label : "Name of books"} , 
+              { key : "Edit" , label : "Edit"} , 
+              { key : "Delete" , label : "Delete"}
           ]
       }
    },
    methods : {
        editAuthor(author)
        {
-          //set showModal to true to show the modal
           this.showModal = true;
-
-          //set edited author to the current author 
           this.editedAuthor = author;
        } , 
        
        updateAuthor(updatedAuthor)
        {
+        console.log(updatedAuthor);
           const idx = this.authors.findIndex(val=> val.id === updatedAuthor.id);
           if(idx !== -1)
           {
             this.authors[idx] = updatedAuthor;
+          }
+       },
+
+       deleteAuthor(author)
+       {
+          const idx = this.authors.findIndex(x1 => x1.id === author.id);
+          if(idx!==-1)
+          {
+              this.authors.splice(idx,1);
           }
        }
    }

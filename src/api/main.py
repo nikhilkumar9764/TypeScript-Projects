@@ -57,14 +57,34 @@ def create_author():
 @app.route('/authors', methods=['GET'])
 def get_authors():
     authors = AuthorModel.query.all()
-    return jsonify([{"id": author.id, "name": author.name , "books" : [b.name for b in author.books ]} for author in authors])
+    return jsonify([{"id": author.id, "name": author.name , "books" : [{"name" : b.name , "page_count" : b.page_count} for b in author.books]} for author in authors])
 
-@app.route('/authors/<int:author_id>', methods=['GET'])
+@app.route('/authors/<int:id>', methods=['GET'])
 def get_author(author_id):
     author = AuthorModel.query.get(author_id)
     if not author:
         return jsonify({"message": "Author not found"}), 404
     return jsonify({"id": author.id, "name": author.name})
+
+@app.route('/update-authors/<int:id>', methods=['PUT'])
+def update_author(id):
+    data1 = request.json
+    author = AuthorModel.query.get(id)
+    if not author:
+        return jsonify({"message": "Author not found"}), 404
+    
+    author.name = data1['name']
+    if 'books' in data1:
+        for book in data1['books']:
+            # Create or update books associated with the author
+            book = BookModel.query.filter_by(name=book['name'], author_id=author.id).first()
+            if not book:
+                default_pgs = book['page_count']
+                book = BookModel(name=book_name, page_count = default_pgs ,author_id=author.id)
+                db.session.add(book)
+
+    db.session.commit()
+    return jsonify({"id": author.id, "name": author.name}) , 201
 
 @app.route('/add-book', methods=['POST'])
 def create_book():

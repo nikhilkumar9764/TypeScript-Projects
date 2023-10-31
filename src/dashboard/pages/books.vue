@@ -13,8 +13,8 @@
         <tbody>
           <tr v-for="book in books" :key="book.id">
             <td>{{ book.name }}</td>
-            <td>{{ book.authorName }}</td>
-            <td>{{ book.pageCount }}</td>
+            <td>{{ book.author_id }}</td>
+            <td>{{ book.page_count }}</td>
           </tr>
         </tbody>
       </table>
