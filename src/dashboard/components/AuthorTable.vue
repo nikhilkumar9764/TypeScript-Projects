@@ -10,12 +10,9 @@
                  </template>
            </b-table>   
         </div>
-        <AuthorEditModal v-if="showModal" :showModal="showModal" :editedAuthor="editedAuthor" :o1="editedAuthor" @author-updated="updateAuthor" />
+        <AuthorEditModal v-if="showModal" :showModal="showModal" :editedAuthor="editedAuthor" @author-updated="updateAuthor" />
     </div>
 </template>
-
-
-           
 
 <script>
 export default

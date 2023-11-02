@@ -16,7 +16,6 @@ const actions = {
       // Make an API request to your backend to fetch authors
       const response = await axios.get('http://localhost:5000/authors');
       
-      console.log(response.data);
       // Commit a mutation to set the retrieved authors in the store
       commit('setAuthors', response.data);
     } catch (error) {
