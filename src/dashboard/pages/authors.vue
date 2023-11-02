@@ -1,18 +1,17 @@
 <template>
     <div>
-      <h1>Authors</h1>
-      <button @click="addAuthor">Add Author</button>
-
-      <AuthorTable v-bind:authors="authors"></AuthorTable>
+        <h1>Authors</h1>
+        <div class="mb-2">
+            <b-button variant="success" @click="addAuthor">Add Author</b-button>
+        </div>
+        <AuthorTable :authors-data="authors"></AuthorTable>
     </div>
+</template>
 
-  
-  </template>
-  
-  <script>
+<script>
 import AuthorTable from '~/components/AuthorTable.vue';
 
-  export default {
+export default {
     data() {
         return {
             authors: [],
@@ -31,7 +30,6 @@ import AuthorTable from '~/components/AuthorTable.vue';
             this.$router.push('/add-author');
         },
     },
-    components: { AuthorTable }
+    components: { AuthorTable },
 };
-  </script>
-  
+</script>
