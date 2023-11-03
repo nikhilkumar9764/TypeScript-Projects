@@ -97,6 +97,17 @@ def update_author(id):
     db.session.commit()
     return jsonify({"id": author.id, "name": author.name})
 
+@app.route('/delete-author/<int:id>' , methods = ['DELETE'])
+def delete_author(id):
+    author = AuthorModel.query.get(id)
+    if not author: 
+        return jsonify({"message": "Author not found"}), 404
+    else:
+        db.session.delete(author)
+        db.session.commit()
+        return jsonify({"message": "Author deleted successfully"}), 200
+        
+
 @app.route('/add-book', methods=['POST'])
 def create_book():
     data = request.get_json()
@@ -114,6 +125,46 @@ def create_book():
     db.session.add(book)
     db.session.commit()
     return jsonify({"message": "Book created successfully"}), 201
+
+@app.route('/delete-book/<int:id>' , methods = ['DELETE'])
+def delete_book(id):
+    book_obt = BookModel.query.get(id)
+    if not book_obt: 
+        return jsonify({"message": "Book not found"}), 404
+    else:
+        db.session.delete(book_obt)
+        db.session.commit()
+        return jsonify({"message": "Book deleted successfully"}), 200
+
+@app.route('/update-book/<int:id>', methods=['PUT'])
+def update_author(id):
+    data = request.get_json()
+    book = BookModel.query.get(id)
+    
+    if not book:
+        return jsonify({"message": "Book not found"}), 404
+    
+    
+    book.name = data['name']
+    
+    if 'books' in data:
+        for book_data in data['books']:
+            book_name = book_data.get('name')
+            page_count = book_data.get('page_count')
+            
+            existing_book = BookModel.query.filter_by(name=book_name, author_id=author.id).first()
+            
+            if existing_book:
+                # Update an existing book
+                existing_book.name = book_name
+                existing_book.page_count = page_count
+            else:
+                # Create a new book
+                new_book = BookModel(name=book_name, page_count=page_count, author=author)
+                db.session.add(new_book)
+    
+    db.session.commit()
+    return jsonify({"id": author.id, "name": author.name})
 
 @app.route('/books', methods=['GET'])
 def get_books():
