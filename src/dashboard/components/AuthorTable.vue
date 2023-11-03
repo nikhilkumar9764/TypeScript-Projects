@@ -82,6 +82,32 @@ export default {
                     });
                 });
         },
+        closeModalAuthor() {
+            this.showModal = false;
+        },
+        updateAuthor(author) {
+            this.$axios
+                .put(`http://localhost:5000/update-authors/${author.id}`, {
+                    name: author.name,
+                    books: author.books,
+                })
+                .then(() => {
+                    this.closeModalAuthor();
+                    this.$store.dispatch('fetchAuthors');
+                    this.$bvToast.toast('Update author success', {
+                        title: 'Success',
+                        variant: 'success',
+                        solid: true,
+                    });
+                })
+                .catch((error) => {
+                    this.$bvToast.toast(error?.message || 'Something wrong', {
+                        title: 'Failed',
+                        variant: 'danger',
+                        solid: true,
+                    });
+                });
+        },
     },
 };
 </script>
