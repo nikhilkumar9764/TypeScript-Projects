@@ -6,19 +6,18 @@
                <b-form-input style='width: 120px' id= "edited-author-name" v-model="editedAuthor.name"></b-form-input>
            </b-form-group>
 
-           <b-form-group label="Books written" label-for="edit-books-written">
-               <div style = "max-width: 600px;" id= "edited-author-books" v-for="val in editedAuthor.books">
-                  <b-form-input style='width: 120px' v-model="val.name"></b-form-input>
-                  <b-form-input style='width: 120px' v-model="val.page_count"></b-form-input>
-               </div>
-           </b-form-group>
+            <b-form-group label="Books written" label-for="edit-books-written">
+                <div style="max-width: 600px" id="edited-author-books" v-for="val in editedAuthor.books">
+                    <b-form-input style="width: 120px" v-model="val.name"></b-form-input>
+                    <b-form-input style="width: 120px" v-model="val.page_count"></b-form-input>
+                </div>
+            </b-form-group>
 
-           <b-button type="submit" variant="primary">Submit</b-button>
-           <b-button type="reset" variant="danger">Reset</b-button>
-       </b-form>
+            <b-button type="submit" variant="primary">Submit</b-button>
+            <b-button type="reset" variant="danger">Reset</b-button>
+        </b-form>
     </b-modal>
 </template>
-
 
 <script>
 import axios from 'axios';
