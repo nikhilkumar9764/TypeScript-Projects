@@ -81,7 +81,7 @@ def update_author(id):
     if 'books' in data:
         for book_data in data['books']:
             book_name = book_data.get('name')
-            page_count = book_data.get('pages_count')
+            page_count = book_data.get('page_count')
             
             existing_book = BookModel.query.filter_by(name=book_name, author_id=author.id).first()
             
