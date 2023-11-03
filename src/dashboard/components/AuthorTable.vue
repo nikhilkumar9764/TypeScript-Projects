@@ -34,7 +34,6 @@ export default {
             authors: [],
             fields: [
                 { key: 'name', label: 'Name' },
-                { key: 'books', label: 'Name of books' },
                 { key: 'number_of_books', label: 'Number of books' },
                 { key: 'Edit', label: 'Edit' },
                 { key: 'Delete', label: 'Delete' },
@@ -55,10 +54,7 @@ export default {
             this.editedAuthor = author;
         },
         deleteAuthor(author) {
-            const idx = this.authors.findIndex((x1) => x1.id === author.id);
-            if (idx !== -1) {
-                this.authors.splice(idx, 1);
-            }
+            console.log('author deleteAuthor', author);
         },
         closeModalAuthor() {
             this.showModal = false;

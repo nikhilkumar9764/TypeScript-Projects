@@ -89,6 +89,8 @@ export default {
 
     methods: {
         handleClose() {
+            this.resetData();
+            this.$store.dispatch('fetchAuthors');
             this.$emit('close');
         },
         addEmptyBook() {
@@ -124,6 +126,10 @@ export default {
         initAuthor(at) {
             this.name = at?.name || '';
             this.books = at?.books || [];
+        },
+        resetData() {
+            this.name = '';
+            this.books = [];
         },
     },
 };

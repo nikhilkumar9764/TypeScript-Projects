@@ -7,7 +7,7 @@
             </div>
             <b-button variant="success" @click="showModalAuthor = true">Add Author</b-button>
         </div>
-        <AuthorTable :authors-data="authorsRendered"></AuthorTable>
+        <AuthorTable v-if="authorsRendered && authorsRendered.length" :authors-data="authorsRendered"></AuthorTable>
         <AuthorModal :show-modal="showModalAuthor" @close="closeModalAuthor" @addAuthor="addAuthor" />
     </div>
 </template>
@@ -33,7 +33,10 @@ export default {
             return this.authors.filter((at) => at.name.toUpperCase().includes(this.searchAuthorValue.toUpperCase()));
         },
         authors() {
-            return this.$store?.state?.authors?.authors || [];
+            return (this.$store?.state?.authors?.authors || []).map((author) => ({
+                ...author,
+                number_of_books: author.books.length,
+            }));
         },
     },
     beforeMount() {
