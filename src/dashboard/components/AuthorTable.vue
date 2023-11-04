@@ -54,7 +54,23 @@ export default {
             this.editedAuthor = author;
         },
         deleteAuthor(author) {
-            console.log('author deleteAuthor', author);
+            this.$axios
+                .delete(`http://localhost:5000/delete-authors/${author.id}`)
+                .then(() => {
+                    this.$store.dispatch('fetchAuthors');
+                    this.$bvToast.toast('Delete author success', {
+                        title: 'Success',
+                        variant: 'success',
+                        solid: true,
+                    });
+                })
+                .catch((error) => {
+                    this.$bvToast.toast(error?.message || 'Something wrong', {
+                        title: 'Failed',
+                        variant: 'danger',
+                        solid: true,
+                    });
+                });
         },
         closeModalAuthor() {
             this.showModal = false;

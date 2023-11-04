@@ -72,21 +72,37 @@ export default {
             this.showModal = true;
         },
         deleteBook(book) {
-            console.log('book delete', book);
+            this.$axios
+                .delete(`http://localhost:5000/delete-book/${book.id}`)
+                .then(() => {
+                    this.$store.dispatch('fetchBooks');
+                    this.$bvToast.toast('Delete book success', {
+                        title: 'Success',
+                        variant: 'success',
+                        solid: true,
+                    });
+                })
+                .catch((error) => {
+                    this.$bvToast.toast(error?.message || 'Something wrong', {
+                        title: 'Failed',
+                        variant: 'danger',
+                        solid: true,
+                    });
+                });
         },
         closeBookModal() {
             this.showModal = false;
         },
-        updateBook(author) {
+        updateBook(book) {
             this.$axios
-                .put(`http://localhost:5000/update-authors/${author.id}`, {
-                    name: author.name,
-                    books: author.books,
+                .put(`http://localhost:5000/update-book/${book.id}`, {
+                    name: book.name,
+                    page_count: book.page_count,
                 })
                 .then(() => {
                     this.closeBookModal();
-                    this.$store.dispatch('fetchAuthors');
-                    this.$bvToast.toast('Update author success', {
+                    this.$store.dispatch('fetchBooks');
+                    this.$bvToast.toast('Update book success', {
                         title: 'Success',
                         variant: 'success',
                         solid: true,

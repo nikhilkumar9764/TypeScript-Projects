@@ -38,6 +38,7 @@ export default {
                 { title: 'Home', to: '/' },
                 { title: 'Authors', to: '/authors' },
                 { title: 'Books', to: '/books' },
+                { title: 'Login', to: '/login' },
             ],
         };
     },
