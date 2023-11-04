@@ -137,34 +137,17 @@ def delete_book(id):
         return jsonify({"message": "Book deleted successfully"}), 200
 
 @app.route('/update-book/<int:id>', methods=['PUT'])
-def update_author(id):
+def update_book(id):
     data = request.get_json()
     book = BookModel.query.get(id)
     
     if not book:
         return jsonify({"message": "Book not found"}), 404
     
-    
     book.name = data['name']
-    
-    if 'books' in data:
-        for book_data in data['books']:
-            book_name = book_data.get('name')
-            page_count = book_data.get('page_count')
-            
-            existing_book = BookModel.query.filter_by(name=book_name, author_id=author.id).first()
-            
-            if existing_book:
-                # Update an existing book
-                existing_book.name = book_name
-                existing_book.page_count = page_count
-            else:
-                # Create a new book
-                new_book = BookModel(name=book_name, page_count=page_count, author=author)
-                db.session.add(new_book)
-    
+    book.page_count = data['page_count']
     db.session.commit()
-    return jsonify({"id": author.id, "name": author.name})
+    return jsonify({"id": book.id, "name": book.name})
 
 @app.route('/books', methods=['GET'])
 def get_books():
