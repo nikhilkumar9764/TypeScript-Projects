@@ -15,13 +15,7 @@
                     </nuxt-link>
                 </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
-                    <b-nav-item-dropdown right>
-                        <template #button-content>
-                            <em>User</em>
-                        </template>
-                        <b-dropdown-item href="#">Profile</b-dropdown-item>
-                        <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-                    </b-nav-item-dropdown>
+                    <nuxt-link to="/login" class="px-4 text-white"> Login </nuxt-link>
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
@@ -38,7 +32,6 @@ export default {
                 { title: 'Home', to: '/' },
                 { title: 'Authors', to: '/authors' },
                 { title: 'Books', to: '/books' },
-                { title: 'Login', to: '/login' },
             ],
         };
     },
