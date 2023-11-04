@@ -10,16 +10,19 @@
                 </template>
             </b-table>
         </div>
-        <AuthorEditModal
-            v-if="showModal"
-            :showModal="showModal"
-            :editedAuthor="editedAuthor"
-            @author-updated="updateAuthor"
+
+        <AuthorModal
+            :show-modal="showModal"
+            :author="editedAuthor"
+            @close="closeModalAuthor"
+            @updateAuthor="updateAuthor"
         />
     </div>
 </template>
 
 <script>
+import AuthorModal from '../components/AuthorModal.vue';
+
 export default {
     props: {
         authorsData: Array,
@@ -31,7 +34,7 @@ export default {
             authors: [],
             fields: [
                 { key: 'name', label: 'Name' },
-                { key: 'books', label: 'Name of books' },
+                { key: 'number_of_books', label: 'Number of books' },
                 { key: 'Edit', label: 'Edit' },
                 { key: 'Delete', label: 'Delete' },
             ],
@@ -50,21 +53,83 @@ export default {
             this.showModal = true;
             this.editedAuthor = author;
         },
-
-        updateAuthor(updatedAuthor) {
-            console.log(updatedAuthor);
-            const idx = this.authors.findIndex((val) => val.id === updatedAuthor.id);
-            if (idx !== -1) {
-                this.authors[idx] = updatedAuthor;
-            }
-        },
-
         deleteAuthor(author) {
-            const idx = this.authors.findIndex((x1) => x1.id === author.id);
-            if (idx !== -1) {
-                this.authors.splice(idx, 1);
-            }
+            this.$axios
+                .delete(`http://localhost:5000/delete-authors/${author.id}`)
+                .then(() => {
+                    this.$store.dispatch('fetchAuthors');
+                    this.$bvToast.toast('Delete author success', {
+                        title: 'Success',
+                        variant: 'success',
+                        solid: true,
+                    });
+                })
+                .catch((error) => {
+                    this.$bvToast.toast(error?.message || 'Something wrong', {
+                        title: 'Failed',
+                        variant: 'danger',
+                        solid: true,
+                    });
+                });
+        },
+        closeModalAuthor() {
+            this.showModal = false;
+        },
+        updateAuthor(author) {
+            this.$axios
+                .put(`http://localhost:5000/update-authors/${author.id}`, {
+                    name: author.name,
+                    books: author.books,
+                })
+                .then(() => {
+                    this.closeModalAuthor();
+                    this.$store.dispatch('fetchAuthors');
+                    this.$bvToast.toast('Update author success', {
+                        title: 'Success',
+                        variant: 'success',
+                        solid: true,
+                    });
+                })
+                .catch((error) => {
+                    this.$bvToast.toast(error?.message || 'Something wrong', {
+                        title: 'Failed',
+                        variant: 'danger',
+                        solid: true,
+                    });
+                });
+        },
+        closeModalAuthor() {
+            this.showModal = false;
+        },
+        updateAuthor(author) {
+            this.$axios
+                .put(`http://localhost:5000/update-authors/${author.id}`, {
+                    name: author.name,
+                    books: author.books,
+                })
+                .then(() => {
+                    this.closeModalAuthor();
+                    this.$store.dispatch('fetchAuthors');
+                    this.$bvToast.toast('Update author success', {
+                        title: 'Success',
+                        variant: 'success',
+                        solid: true,
+                    });
+                })
+                .catch((error) => {
+                    this.$bvToast.toast(error?.message || 'Something wrong', {
+                        title: 'Failed',
+                        variant: 'danger',
+                        solid: true,
+                    });
+                });
         },
     },
 };
 </script>
+
+<style>
+th {
+    white-space: nowrap;
+}
+</style>

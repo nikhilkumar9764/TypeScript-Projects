@@ -26,7 +26,7 @@ export default {
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [],
 
-    store : '~/store/index.js',
+    store: '~/store/index.js',
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [],
@@ -62,4 +62,8 @@ export default {
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {},
+
+    env: {
+        API_URL: process.env.API_URL,
+    },
 };
